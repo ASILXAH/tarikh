@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Қазақстан Тарихы Бойынша Тест (Офлайн)</title>
+    <style>
+        /* Жалпы стильдер */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column; /* Негізгі контейнерлерді тігінен орналастыру үшін */
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-container { /* Барлық мазмұн үшін негізгі контейнер */
+            width: 100%;
+            max-width: 700px;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card { /* Мәзір, тест, нәтижелер үшін ортақ стиль */
+            padding: 1.5rem;
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem; /* Карточкалар арасындағы бос орын */
+        }
+        .card:last-child {
+            margin-bottom: 0;
+        }
+
+
+        /* Тақырып */
+        header {
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #4338ca; /* Indigo-700 */
+        }
+        header h2 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            color: #374151; /* slate-700 */
+            margin-bottom: 1rem;
+        }
+
+        /* Негізгі мәзір */
+        #main-menu-container .menu-button,
+        #main-menu-container .telegram-button { /* Telegram батырмасына ортақ стильдер */
+            display: block;
+            width: 100%;
+            color: white;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-weight: 500;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border: none;
+            text-decoration: none; /* Сілтеме астындағы сызықты алып тастау */
+            box-sizing: border-box; /* Padding және border дұрыс есептелуі үшін */
+        }
+        #main-menu-container .menu-button {
+            background-color: #4f46e5; /* Indigo-600 */
+        }
+        #main-menu-container .menu-button:hover {
+            background-color: #4338ca; /* Indigo-700 */
+        }
+        #main-menu-container .telegram-button {
+            background-color: #229ED9; /* Telegram көк түсі */
+        }
+        #main-menu-container .telegram-button:hover {
+            background-color: #1a88c2; /* Telegram көк түсінің қоюырақ нұсқасы */
+        }
+        #main-menu-container .menu-button:last-child,
+        #main-menu-container .telegram-button:last-of-type { /* Ең соңғы батырманың астыңғы шегінісін алып тастау */
+            margin-bottom: 0;
+        }
+        .menu-separator { /* Батырмалар арасындағы бос орын */
+            height: 1rem;
+        }
+
+
+        /* Сұрақ аймағы */
+        #quiz-area .mb-4 { margin-bottom: 1rem; }
+        #quiz-area .mb-6 { margin-bottom: 1.5rem; }
+        #quiz-area .p-5 { padding: 1.25rem; }
+        #quiz-area .bg-slate-50 { background-color: #f9fafb; }
+        #quiz-area .rounded-lg { border-radius: 0.5rem; }
+        #quiz-area .border { border-width: 1px; }
+        #quiz-area .border-slate-200 { border-color: #e5e7eb; }
+
+        /* Прогресс бар */
+        .progress-bar-container {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.875rem;
+            color: #4b5563;
+            margin-bottom: 0.25rem;
+        }
+        .progress-bar-wrapper {
+            width: 100%;
+            background-color: #e5e7eb;
+            border-radius: 9999px;
+            height: 0.625rem;
+        }
+        #progress-bar {
+            background-color: #4f46e5;
+            height: 100%;
+            border-radius: 9999px;
+            transition: width 0.3s ease-in-out;
+        }
+
+        /* Сұрақ мәтіні */
+        #question-text {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: #1f2937;
+        }
+
+        /* Жауап батырмалары */
+        #answers-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        @media (min-width: 768px) {
+            #answers-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .answer-btn {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background-color: white;
+            color: #1f2937;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out, transform 0.1s ease, border-color 0.2s ease-in-out;
+        }
+        .answer-btn:hover {
+            background-color: #f9fafb;
+            transform: translateY(-2px);
+        }
+        .answer-btn:focus {
+            outline: 2px solid transparent;
+            outline-offset: 2px;
+            box-shadow: 0 0 0 2px #6366f1;
+        }
+        .answer-btn.correct {
+            background-color: #10B981 !important;
+            color: white !important;
+            border-color: #059669 !important;
+        }
+        .answer-btn.incorrect {
+            background-color: #EF4444 !important;
+            color: white !important;
+            border-color: #DC2626 !important;
+        }
+        .answer-btn:disabled {
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        /* Кері байланыс */
+        #feedback-container {
+            text-align: center;
+            margin-bottom: 1rem;
+            height: 1.5rem;
+        }
+        #feedback-text {
+            font-size: 1.125rem;
+            font-weight: 500;
+        }
+        .text-emerald-600 { color: #059669; }
+        .text-red-600 { color: #dc2626; }
+
+        /* Навигация батырмалары */
+        .nav-button {
+            font-weight: 600;
+            padding: 0.75rem 1.5rem; /* Кішірейтілген padding */
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+            cursor: pointer;
+            border: none;
+            margin: 0.25rem; /* Батырмалар арасындағы кішігірім бос орын */
+        }
+        .nav-button:hover {
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+        #next-btn {
+            background-color: #4f46e5;
+            color: white;
+        }
+        #next-btn:hover {
+            background-color: #4338ca;
+        }
+        #next-btn:disabled {
+            background-color: #a5b4fc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* Нәтижелер экраны */
+        #results-screen h2 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #4338ca;
+            margin-bottom: 1rem;
+        }
+        #results-screen .text-xl { font-size: 1.25rem; }
+        #results-screen .text-slate-700 { color: #334155; }
+        #results-screen .mb-2 { margin-bottom: 0.5rem; }
+        #results-screen .text-4xl { font-size: 2.25rem; }
+        #results-screen .text-emerald-600 { color: #059669; }
+        #results-screen .mb-6 { margin-bottom: 1.5rem; }
+        #results-screen .text-lg { font-size: 1.125rem; }
+        #results-screen .text-slate-600 { color: #4b5563; }
+
+        #restart-btn {
+            background-color: #10b981;
+            color: white;
+        }
+        #restart-btn:hover {
+            background-color: #059669;
+        }
+        .back-to-menu-btn {
+            background-color: #6b7280; /* Slate-500 */
+            color: white;
+        }
+        .back-to-menu-btn:hover {
+            background-color: #4b5563; /* Slate-600 */
+        }
+         .quiz-header-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .quiz-header-controls .back-to-menu-btn-small {
+            background-color: #d1d5db; /* Slate-300 */
+            color: #1f2937; /* Slate-800 */
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            border-radius: 0.375rem; /* rounded-md */
+        }
+         .quiz-header-controls .back-to-menu-btn-small:hover {
+            background-color: #9ca3af; /* Slate-400 */
+        }
+
+
+        /* Модальды терезе стильдері */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            padding: 25px;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #777;
+            cursor: pointer;
+        }
+        .modal-close-btn:hover { color: #333; }
+        .modal-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #dc2626;
+            margin-bottom: 0.75rem;
+        }
+        .modal-content p { color: #334155; }
+
+        /* Жасыру/көрсету үшін класс */
+        .hidden { display: none !important; }
+
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <h1>Қазақстан Тарихы Тесті</h1>
+        </header>
+
+        <div id="main-menu-container" class="card">
+            <header>
+                <h2 id="main-menu-title">Тестті таңдаңыз:</h2> </header>
+            <div id="menu-buttons">
+                </div>
+            <div class="menu-separator"></div> <a href="https://t.me/tarihp" target="_blank" class="telegram-button">
+                Telegram Арнамыз
+            </a>
+        </div>
+
+        <div id="quiz-area" class="card hidden">
+             <div class="quiz-header-controls">
+                <h2 id="quiz-title" class="text-xl font-semibold text-slate-700">Тест атауы</h2>
+                <button id="back-to-menu-from-quiz-btn" class="nav-button back-to-menu-btn-small">Мәзірге</button>
+            </div>
+            <div class="mb-4">
+                <div class="progress-bar-container">
+                    <span>Сұрақ: <span id="current-question-num">1</span>/<span id="total-questions">0</span></span>
+                    <span>Ұпай: <span id="score">0</span></span>
+                </div>
+                <div class="progress-bar-wrapper">
+                    <div id="progress-bar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div id="question-container" class="mb-6 p-5 bg-slate-50 rounded-lg border border-slate-200">
+                <p id="question-text">Сұрақ мәтіні осында болады...</p>
+            </div>
+
+            <div id="answers-container" class="mb-6">
+                </div>
+
+            <div id="feedback-container">
+                <p id="feedback-text"></p>
+            </div>
+
+            <div style="text-align: center;" class="mt-6">
+                <button id="next-btn" class="nav-button">
+                    Келесі сұрақ
+                </button>
+            </div>
+        </div>
+
+        <div id="results-screen" class="card hidden">
+            <header>
+                <h2 id="results-title">Тест Аяқталды!</h2>
+            </header>
+            <p class="text-xl text-slate-700 mb-2">Сіздің нәтижеңіз:</p>
+            <p class="text-4xl font-bold text-emerald-600 mb-6" id="final-score">0 / 0</p>
+            <p class="text-lg text-slate-600 mb-6" id="result-message"></p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-3">
+                <button id="restart-btn" class="nav-button">Тестті қайталау</button>
+                <button id="back-to-menu-from-results-btn" class="nav-button back-to-menu-btn">Негізгі мәзір</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="error-modal" class="modal">
+        <div class="modal-content">
+            <span id="modal-close-btn" class="modal-close-btn">&times;</span>
+            <h3>Қате</h3>
+            <p id="error-message"></p>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Data: Only Civil War test
+        const quizData = {
+            "civil_war": { // Тек Азамат соғысы тесті қалдырылды
+                name: "Азамат соғысы",
+                questions: [
+                    {
+                        question: "Халықтың көп бөлігінің Уақытша үкіметке наразы болу себебі:",
+                        answers: [
+                            { text: "А) Саяси ереуілдердің көбеюі", correct: false },
+                            { text: "Ә) Әлеуметтік экономикалық ахуалдың төмендеуі", correct: true },
+                            { text: "Б) Кәсіпорындардың мемлекет меншігіне өтуі", correct: false },
+                            { text: "В) Большевиктердің революциясы", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Саяси ереуілдер көбейді:",
+                        answers: [
+                            { text: "А) 1917 жылдың көктемінде", correct: false },
+                            { text: "Ә) 1917 жылдың жазында", correct: true },
+                            { text: "Б) 1917 жылдың күзінде", correct: false },
+                            { text: "В) 1918 жылдың қысында", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Ереуілшілер өз қолдарына ала бастады:",
+                        answers: [
+                            { text: "А) Жерді басқаруды", correct: false },
+                            { text: "Ә) Кәсіпорындарды басқаруды", correct: true },
+                            { text: "Б) Саяси билікті", correct: false },
+                            { text: "В) Әскери күштерді", correct: false }
+                        ]
+                    },
+                    {
+                        question: "1917 жылдың жазында барлық елде басталған саяси оқиға:",
+                        answers: [
+                            { text: "А) Уақытша үкіметтің құлауы", correct: false },
+                            { text: "Ә) Кеңестердің большевиктенуі", correct: true },
+                            { text: "Б) Азамат соғысы", correct: false },
+                            { text: "В) Шетелдік интервенция", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Уақытша үкімет билігі құлатылды:",
+                        answers: [
+                            { text: "А) 1917 жылы 25 қазанда (7 қараша)", correct: true },
+                            { text: "Ә) 1918 жылы 1 қаңтарда", correct: false },
+                            { text: "Б) 1917 жылы 1 мамырда", correct: false },
+                            { text: "В) 1918 жылы 25 қазанда", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Уақытша үкімет билігі құлатылып, оның орнына келді:",
+                        answers: [
+                            { text: "А) Халық Комиссарлары Кеңесі", correct: false },
+                            { text: "Ә) Әскери-революциялық комитет", correct: true },
+                            { text: "Б) Кеңестердің II Бүкілресейлік съезі", correct: false },
+                            { text: "В) «Үш жүз» партиясы", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Үкімет міндетін атқару жүктелді:",
+                        answers: [
+                            { text: "А) Халық Комиссарлары Кеңесіне", correct: true },
+                            { text: "Ә) Әскери-революциялық комитетке", correct: false },
+                            { text: "Б) Кеңестердің II Бүкілресейлік съезіне", correct: false },
+                            { text: "В) В.И. Ленинге", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Халық Комиссарлары Кеңесін басқарды:",
+                        answers: [
+                            { text: "А) Мұқан Әйтпенов", correct: false },
+                            { text: "Ә) К. Тоғысов", correct: false },
+                            { text: "Б) В.И. Ульянов (Ленин)", correct: true },
+                            { text: "В) Антанта елдері", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Ресейлік саяси қайраткер Кеңес өкіметі мен большевиктер партиясының негізін қалаушы:",
+                        answers: [
+                            { text: "А) К. Тоғысов", correct: false },
+                            { text: "Ә) В.И. Ленин", correct: true },
+                            { text: "Б) Мұқан Әйтпенов", correct: false },
+                            { text: "В) Халық Комиссарлары", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазан төңкерісінің нәтижесі:",
+                        answers: [
+                            { text: "А) Уақытша үкімет құлады, Кеңес үкіметі билікке келді", correct: true },
+                            { text: "Ә) Жер жекеменшікке берілді", correct: false },
+                            { text: "Б) Азамат соғысы аяқталды", correct: false },
+                            { text: "В) Шетелдік интервенция басталды", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Кеңестердің II Бүкілресейлік съезі қабылдаған екі негізгі декрет:",
+                        answers: [
+                            { text: "А) Бітім және жер туралы декрет", correct: true },
+                            { text: "Ә) Жер және интервенция туралы декрет", correct: false },
+                            { text: "Б) Бітім және экономика туралы декрет", correct: false },
+                            { text: "В) Жер және мәдениет туралы декрет", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Бітім туралы декреттің мәні:",
+                        answers: [
+                            { text: "А) Жерді жергілікті кеңестерге беру", correct: false },
+                            { text: "Ә) Бірінші дүниежүзілік соғыстан бітім жасап, соғыстан шығу", correct: true },
+                            { text: "Б) Кәсіпорындарды мемлекет меншігіне алу", correct: false },
+                            { text: "В) Халықтардың өзін-өзі билеу құқығы", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Жер туралы декреттің мәні:",
+                        answers: [
+                            { text: "А) Жерді жекеменшікке беру", correct: false },
+                            { text: "Ә) Жерге жекеменшік жойылып, жергілікті кеңестердің қарамағына өтті", correct: true },
+                            { text: "Б) Жерді мемлекет меншігіне алу", correct: false },
+                            { text: "В) Жерді шетелдіктерге беру", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Ленин бастаған кеңестер ұстанды:",
+                        answers: [
+                            { text: "А) Жеке меншікті қолдау саясатын", correct: false },
+                            { text: "Ә) Әділеттілік пен қоғамдық теңдікке бағытталған саясат", correct: true },
+                            { text: "Б) Шетелдік интервенцияны қолдау", correct: false },
+                            { text: "В) Уақытша үкіметті қолдау", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Ұлттық шеткері аймақтағы халықтарды өз жағына тарту үшін кеңестер 1917 жылы қарашада қабылдады:",
+                        answers: [
+                            { text: "А) Жер туралы декрет", correct: false },
+                            { text: "Ә) «Ресей халықтары құқықтарының Декларациясы»", correct: true },
+                            { text: "Б) Бітім туралы декрет", correct: false },
+                            { text: "В) Экономика туралы декрет", correct: false }
+                        ]
+                    },
+                    {
+                        question: "«Ресей халықтары құқықтарының Декларациясы» мәні:",
+                        answers: [
+                            { text: "А) Жерді жекеменшікке беру", correct: false },
+                            { text: "Ә) Ресей халықтарының бөлініп, дербес мемлекет құруына дейінгі ерікті өзін-өзі билеу құқығы", correct: true },
+                            { text: "Б) Кәсіпорындарды басқару", correct: false },
+                            { text: "В) Соғыстан шығу", correct: false }
+                        ]
+                    },
+                    {
+                        question: "«Ресей халықтары құқықтарының Декларациясымен» қоса қабылданды:",
+                        answers: [
+                            { text: "А) Жер туралы декрет", correct: false },
+                            { text: "Ә) «Ресей мен Шығыстың барлық еңбекші мұсылмандарына үндеу»", correct: true },
+                            { text: "Б) Бітім туралы декрет", correct: false },
+                            { text: "В) Экономика туралы декрет", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазақтардың мәдени-діни ісіне араласпау жөнінде кепілдік берді:",
+                        answers: [
+                            { text: "А) Жер туралы декрет", correct: false },
+                            { text: "Ә) «Ресей мен Шығыстың барлық еңбекші мұсылмандарына үндеу»", correct: true },
+                            { text: "Б) Бітім туралы декрет", correct: false },
+                            { text: "В) «Ресей халықтары құқықтарының Декларациясы»", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Большевиктер орыс емес халықтарды тәуелділікте ұстап, мүмкіндік бермеуге тырысты:",
+                        answers: [
+                            { text: "А) Жеке мемлекет құруға", correct: true },
+                            { text: "Ә) Кәсіпорындарды басқаруға", correct: false },
+                            { text: "Б) Жерді жекеменшікке алуға", correct: false },
+                            { text: "В) Саяси ереуілдерге қатысуға", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазақстанда Кеңес үкіметінің құрылуын тездетті:",
+                        answers: [
+                            { text: "А) Уақытша үкіметтің құлауы", correct: false },
+                            { text: "Ә) Ресейдегі большевиктер революциясының жеңісі", correct: true },
+                            { text: "Б) Шетелдік интервенция", correct: false },
+                            { text: "В) Азамат соғысы", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазақстанда Кеңес үкіметі алдымен орнады:",
+                        answers: [
+                            { text: "А) Ауылдық жерлерде", correct: false },
+                            { text: "Ә) Қалалар мен ірі елді мекендерде", correct: true },
+                            { text: "Б) Шекара аймақтарында", correct: false },
+                            { text: "В) Таулы аймақтарда", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазақстанда Кеңес үкіметінің орнауы созылды:",
+                        answers: [
+                            { text: "А) 1917 жылдың қазан айынан 1918 жылдың наурыз айына дейін", correct: true },
+                            { text: "Ә) 1918 жылдың қаңтарынан 1919 жылдың қаңтарына дейін", correct: false },
+                            { text: "Б) 1917 жылдың мамырынан 1917 жылдың желтоқсанына дейін", correct: false },
+                            { text: "В) 1918 жылдың наурызынан 1919 жылдың мамырына дейін", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазақстанда Кеңес үкіметін орнату мен нығайтуда ерекше рөл атқарды:",
+                        answers: [
+                            { text: "А) Антанта елдері", correct: false },
+                            { text: "Ә) «Үш жүз» партиясы", correct: true },
+                            { text: "Б) Ақтар", correct: false },
+                            { text: "В) Уақытша үкімет", correct: false }
+                        ]
+                    },
+                    {
+                        question: "«Үш жүз» партиясының негізін қаланды:",
+                        answers: [
+                            { text: "А) 1917 жылы 17 қарашада", correct: true },
+                            { text: "Ә) 1918 жылы 1 қаңтарда", correct: false },
+                            { text: "Б) 1917 жылы 1 мамырда", correct: false },
+                            { text: "В) 1918 жылы 25 қазанда", correct: false }
+                        ]
+                    },
+                    {
+                        question: "«Үш жүз» партиясының негізін қалаған:",
+                        answers: [
+                            { text: "А) В.И. Ленин", correct: false },
+                            { text: "Ә) Мұқан Әйтпенов", correct: true },
+                            { text: "Б) К. Тоғысов", correct: false },
+                            { text: "В) Халық Комиссарлары", correct: false }
+                        ]
+                    },
+                    {
+                        question: "«Үш жүз» партиясы большевиктердің сенімді одақтасына айналды:",
+                        answers: [
+                            { text: "А) Партия басшылығына Мұқан Әйтпеновтың келуімен", correct: false },
+                            { text: "Ә) Партия басшылығына К. Тоғысовтың келуімен", correct: true },
+                            { text: "Б) Уақытша үкіметтің құлауымен", correct: false },
+                            { text: "В) Азамат соғысының басталуымен", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазан революциясынан кейін экономикадағы өзгеріс:",
+                        answers: [
+                            { text: "А) Жер жекеменшікке берілді", correct: false },
+                            { text: "Ә) Барлық кәсіпорындар мемлекет меншігіне өтті", correct: true },
+                            { text: "Б) Саяси ереуілдер тоқтады", correct: false },
+                            { text: "В) Шетелдік интервенция басталды", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазақтарды өз жағына тарту үшін большевиктер жүргізген саясат:",
+                        answers: [
+                            { text: "А) Жеке мемлекет құруға рұқсат беру", correct: false },
+                            { text: "Ә) Қазақтарға тартып алынған жерді қайтып беру", correct: true },
+                            { text: "Б) Мәдени-діни істерге араласу", correct: false },
+                            { text: "В) Кәсіпорындарды басқаруға беру", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазан революциясынан кейін басталды:",
+                        answers: [
+                            { text: "А) Бірінші дүниежүзілік соғыс", correct: false },
+                            { text: "Ә) Азамат соғысы", correct: true },
+                            { text: "Б) Шетелдік интервенция", correct: false },
+                            { text: "В) Уақытша үкіметтің құрылуы", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Азамат соғысы жүрді:",
+                        answers: [
+                            { text: "А) Большевиктер мен Уақытша үкімет арасында", correct: false },
+                            { text: "Ә) Большевиктер мен Ақтар арасында", correct: true },
+                            { text: "Б) Антанта елдері мен Кеңес үкіметі арасында", correct: false },
+                            { text: "В) Кеңестер мен «Үш жүз» партиясы арасында", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Кеңес үкіметіне қарсы шетелдік соғыс интервенциясы басталды:",
+                        answers: [
+                            { text: "А) 1917 жылы қазанда", correct: false },
+                            { text: "Ә) 1918 жылы көктемде", correct: true },
+                            { text: "Б) 1917 жылы жазда", correct: false },
+                            { text: "В) 1918 жылы қыста", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Кеңес үкіметіне шетелдік интервенция жасады:",
+                        answers: [
+                            { text: "А) Халық Комиссарлары", correct: false },
+                            { text: "Ә) Антанта елдері", correct: true },
+                            { text: "Б) «Үш жүз» партиясы", correct: false },
+                            { text: "В) Ақтар", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Бір немесе бірнеше мемлекеттің басқа мемлекеттің ішкі істеріне күш қолдану арқылы араласуы:",
+                        answers: [
+                            { text: "А) Революция", correct: false },
+                            { text: "Ә) Интервенция", correct: true },
+                            { text: "Б) Декларация", correct: false },
+                            { text: "В) Төңкеріс", correct: false }
+                        ]
+                    },
+                    // Жалғасы (34-59)
+                    {
+                        question: "Антанта елдерінің нұсқауымен 1918 жылы 25 мамырда орын алған оқиға:",
+                        answers: [
+                            { text: "А) Уақытша Сібір үкіметінің құрылуы", correct: false },
+                            { text: "Ә) Чехословак корпусының бүлігі", correct: true },
+                            { text: "Б) Алашорда автономиясының құрылуы", correct: false },
+                            { text: "В) Колчак армиясының жеңілісі", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Чехословак корпусы контрреволюциялық күштермен қосылып, басып алды:",
+                        answers: [
+                            { text: "А) Жетісу мен Сырдария облысын", correct: false },
+                            { text: "Ә) Сібірдің бірқатар аумағын, Орал және Петропавл, Ақмола, Қостанай, Семей қалаларын", correct: true },
+                            { text: "Б) Бөкей Ордасы мен Торғай облысын", correct: false },
+                            { text: "В) Солтүстік және Батыс Қазақстанды", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Кеңес үкіметіне қарсы Орал және Орынбор казактарын бастаған:",
+                        answers: [
+                            { text: "А) Адмирал Колчак", correct: false },
+                            { text: "Ә) Атаман А.И.Дутов", correct: true },
+                            { text: "Б) Ә.Жангелдин", correct: false },
+                            { text: "В) Анненков", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Контрреволюциялық күштер басып алған Қазақстан аймақтары:",
+                        answers: [
+                            { text: "А) Жетісу және Сырдария облысы", correct: false },
+                            { text: "Ә) Солтүстік және Шығыс, Орталық Қазақстан аймағы", correct: true },
+                            { text: "Б) Бөкей Ордасы және Торғай облысы", correct: false },
+                            { text: "В) Оңтүстік және Батыс Қазақстан", correct: false }
+                        ]
+                    },
+                    {
+                        question: "1918 жылы жазда Кеңес үкіметіне қараған аймақтар:",
+                        answers: [
+                            { text: "А) Солтүстік және Шығыс Қазақстан", correct: false },
+                            { text: "Ә) Бөкей Ордасы, Жетісу, Сырдария облысы мен Торғай облысының оңтүстігі", correct: true },
+                            { text: "Б) Орал және Семей облыстары", correct: false },
+                            { text: "В) Ақмола және Қостанай аймақтары", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазақстандағы Азамат соғысының ең алғашқы ошақтарының бірі пайда болды:",
+                        answers: [
+                            { text: "А) 1918 жылы жазда Семейде", correct: false },
+                            { text: "Ә) 1917 жылдың қарашасында Орынбор қаласында", correct: true },
+                            { text: "Б) 1919 жылы Жетісуда", correct: false },
+                            { text: "В) 1918 жылы Ақтөбеде", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Уақытша Сібірлік үкімет құрылды:",
+                        answers: [
+                            { text: "А) Орынборда", correct: false },
+                            { text: "Ә) Омбыда", correct: true },
+                            { text: "Б) Семейде", correct: false },
+                            { text: "В) Ақтөбеде", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Омбыдағы Уақытша Сібір үкіметінің басшысы:",
+                        answers: [
+                            { text: "А) Атаман Дутов", correct: false },
+                            { text: "Ә) Адмирал Колчак", correct: true },
+                            { text: "Б) Ә.Жангелдин", correct: false },
+                            { text: "В) Анненков", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазақстандағы ақ гвардияның тірегі:",
+                        answers: [
+                            { text: "А) Алашорда автономиясы", correct: false },
+                            { text: "Ә) Сібірдегі Уақытша үкімет", correct: true },
+                            { text: "Б) Чехословак корпусы", correct: false },
+                            { text: "В) Орал казактары", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Сібірдегі Уақытша үкімет өз жағына тартуға тырысты:",
+                        answers: [
+                            { text: "А) Орал казактарын", correct: false },
+                            { text: "Ә) Алашорда автономиясының мүшелерін", correct: true },
+                            { text: "Б) Жетісу партизандарын", correct: false },
+                            { text: "В) Қызыл Армияны", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Сібірдегі Уақытша үкімет Алашордамен одақ жасай алмау себебі:",
+                        answers: [
+                            { text: "А) Алашорда Кеңес үкіметін қолдады", correct: false },
+                            { text: "Ә) Колчак қазақтарға автономия беруге қарсы болды", correct: true },
+                            { text: "Б) Алашорда әскери қолдау көрсете алмады", correct: false },
+                            { text: "В) Чехословак корпусы кедергі жасады", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қызыл Армия құрамында құрылған қазақ полктері:",
+                        answers: [
+                            { text: "А) Алаш атты әскер полкі", correct: false },
+                            { text: "Ә) Орынбор қазақ полкі, қазақ эскадроны", correct: true },
+                            { text: "Б) Семей партизан отряды", correct: false },
+                            { text: "В) Жетісу қазақ полкі", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қызыл Армия жағындағы қазақ ұлттық әскерін құруға белсене атсалысты:",
+                        answers: [
+                            { text: "А) Атаман Дутов, Анненков", correct: false },
+                            { text: "Ә) Ә.Жангелдин, С.Арғыншиев, О.Исаев, М.Масанчи, А.Розыбақиев", correct: true },
+                            { text: "Б) Адмирал Колчак, А.И.Дутов", correct: false },
+                            { text: "В) Х.Чурин, Ж.Сәрсеков", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Алаш атты әскер полкі ұйымдастырылды:",
+                        answers: [
+                            { text: "А) 1918 жылы тамызда, Семей қаласында", correct: true },
+                            { text: "Ә) 1919 жылы жазда, Орынборда", correct: false },
+                            { text: "Б) 1917 жылы қарашада, Ақтөбеде", correct: false },
+                            { text: "В) 1918 жылы қыста, Жетісуда", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Бөкей Ордасында құрылған қазақ атты әскерін ұйымдастырғандар:",
+                        answers: [
+                            { text: "А) Ә.Жангелдин, С.Арғыншиев", correct: false },
+                            { text: "Ә) Х.Чурин, Ж.Сәрсеков, Б.Жәнекешевтер", correct: true },
+                            { text: "Б) О.Исаев, М.Масанчи", correct: false },
+                            { text: "В) Атаман Дутов, Анненков", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Семей облысындағы партизандық қозғалыс ошағы:",
+                        answers: [
+                            { text: "А) Жетісу майданы", correct: false },
+                            { text: "Ә) Черкасск қорғанысы", correct: true },
+                            { text: "Б) Ақтөбе майданы", correct: false },
+                            { text: "В) Тарбағатай отряды", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Азамат соғысы жылдарында Жетісу майданының солтүстік-шығыс шебіндегі Черкасск ауданындағы партизандық қозғалыс:",
+                        answers: [
+                            { text: "А) «Tay қырандары»", correct: false },
+                            { text: "Ә) Черкасск қорғанысы", correct: true },
+                            { text: "Б) Алаш атты әскері", correct: false },
+                            { text: "В) Орынбор қазақ полкі", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Тарбағатай мен Алтайдағы партизандық отряд:",
+                        answers: [
+                            { text: "А) Черкасск қорғанысы", correct: false },
+                            { text: "Ә) «Tay қырандары»", correct: true },
+                            { text: "Б) Орынбор қазақ полкі", correct: false },
+                            { text: "В) Алаш атты әскері", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Азамат соғысы жылдарында Ақтөбе майданын қару-жарақ, дәрідәрмекпен қамтамасыз етті:",
+                        answers: [
+                            { text: "А) Чехословак корпусы", correct: false },
+                            { text: "Ә) Ә. Жангелдин экспедициясы", correct: true },
+                            { text: "Б) Уақытша Сібір үкіметі", correct: false },
+                            { text: "В) Атаман Дутов", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Колчак армиясы жеңіліске ұшырады:",
+                        answers: [
+                            { text: "А) 1918 жылы жазда", correct: false },
+                            { text: "Ә) 1919 жылы жазда", correct: true },
+                            { text: "Б) 1917 жылы қарашада", correct: false },
+                            { text: "В) 1919 жылдың соңында", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Батыс, Солтүстік, солтүстік-шығыс Қазақстан мен Жетісуды азат ету мүмкіндігі пайда болды:",
+                        answers: [
+                            { text: "А) Чехословак корпусының бүлігінен кейін", correct: false },
+                            { text: "Ә) Колчак әскері жеңілген соң", correct: true },
+                            { text: "Б) Алашорда автономиясы құрылған соң", correct: false },
+                            { text: "В) Уақытша Сібір үкіметі құрылған соң", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазақстан аумағы түгелге жуық ақ гвардияшылардан азат етілді:",
+                        answers: [
+                            { text: "А) 1918 жылы жазда", correct: false },
+                            { text: "Ә) 1919 жылдың соңында", correct: true },
+                            { text: "Б) 1917 жылы қарашада", correct: false },
+                            { text: "В) 1918 жылы қыста", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазақстандағы Азамат соғысының соңғы шайқасы болды:",
+                        answers: [
+                            { text: "А) Ақтөбе майданында", correct: false },
+                            { text: "Ә) Жетісу майданында", correct: true },
+                            { text: "Б) Орынборда", correct: false },
+                            { text: "В) Семейде", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Азамат соғысы жылдарында ақ гвардия тарапынан ерекше қатыгездік көрсеткен:",
+                        answers: [
+                            { text: "А) Ә.Жангелдин мен С.Арғыншиев", correct: false },
+                            { text: "Ә) Атаман Дутов пен Анненков", correct: true },
+                            { text: "Б) Х.Чурин мен Ж.Сәрсеков", correct: false },
+                            { text: "В) О.Исаев пен М.Масанчи", correct: false }
+                        ]
+                    },
+                    {
+                        question: "Қазақстанның экономикалық күйзеліске түсуіне себеп болды:",
+                        answers: [
+                            { text: "А) Чехословак корпусының бүлігі", correct: false },
+                            { text: "Ә) Азамат соғысы", correct: true },
+                            { text: "Б) Алашорда автономиясы", correct: false },
+                            { text: "В) Уақытша Сібір үкіметі", correct: false }
+                        ]
+                    },
+                    {
+                        question: "1913 жылмен салыстырғанда көмір мен мұнай өндіру қысқарды:",
+                        answers: [
+                            { text: "А) Көмір 2 есеге, мұнай 3 есеге", correct: false },
+                            { text: "Ә) Көмір 5 есеге, мұнай өндіру 4 есеге", correct: true },
+                            { text: "Б) Көмір 3 есеге, мұнай 2 есеге", correct: false },
+                            { text: "В) Көмір 4 есеге, мұнай 5 есеге", correct: false }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // DOM Elements
+        const mainMenuContainer = document.getElementById('main-menu-container');
+        const mainMenuTitle = document.getElementById('main-menu-title'); // Мәзір тақырыбын алу
+        const menuButtonsContainer = document.getElementById('menu-buttons');
+        const quizArea = document.getElementById('quiz-area');
+        const quizTitleElement = document.getElementById('quiz-title');
+        const questionContainer = document.getElementById('question-container');
+        const questionTextElement = document.getElementById('question-text');
+        const answersContainer = document.getElementById('answers-container');
+        const nextBtn = document.getElementById('next-btn');
+        const feedbackTextElement = document.getElementById('feedback-text');
+        const scoreElement = document.getElementById('score');
+        const currentQuestionNumElement = document.getElementById('current-question-num');
+        const totalQuestionsElement = document.getElementById('total-questions');
+        const progressBarElement = document.getElementById('progress-bar');
+
+        const resultsScreen = document.getElementById('results-screen');
+        const resultsTitleElement = document.getElementById('results-title');
+        const finalScoreElement = document.getElementById('final-score');
+        const resultMessageElement = document.getElementById('result-message');
+        const restartBtn = document.getElementById('restart-btn');
+        const backToMenuFromResultsBtn = document.getElementById('back-to-menu-from-results-btn');
+        const backToMenuFromQuizBtn = document.getElementById('back-to-menu-from-quiz-btn');
+
+
+        const errorModal = document.getElementById('error-modal');
+        const errorMessageElement = document.getElementById('error-message');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        let currentTestKey = null;
+        let currentQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let answerSelectedThisTurn = false;
+
+        // --- Utility Functions ---
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function showErrorModal(message) {
+            errorMessageElement.textContent = message;
+            errorModal.style.display = "flex";
+        }
+
+        function closeErrorModal() {
+            errorModal.style.display = "none";
+        }
+
+        // --- UI Navigation ---
+        function showMainMenu() {
+            mainMenuContainer.classList.remove('hidden');
+            quizArea.classList.add('hidden');
+            resultsScreen.classList.add('hidden');
+            populateMenu();
+        }
+
+        function showQuizArea() {
+            mainMenuContainer.classList.add('hidden');
+            quizArea.classList.remove('hidden');
+            resultsScreen.classList.add('hidden');
+        }
+
+        function showResultsScreen() {
+            mainMenuContainer.classList.add('hidden');
+            quizArea.classList.add('hidden');
+            resultsScreen.classList.remove('hidden');
+        }
+
+        // --- Main Menu Logic ---
+        function populateMenu() {
+            menuButtonsContainer.innerHTML = ''; // Clear previous buttons
+            const testKeys = Object.keys(quizData);
+
+            if (testKeys.length === 1 && testKeys[0] === "civil_war") {
+                // Егер тек "Азамат соғысы" тесті болса, тақырыпты өзгерту
+                mainMenuTitle.textContent = quizData["civil_war"].name; // Тест атауын негізгі мәзір тақырыбына қою
+                 // "Тестті таңдаңыз" дегенді жасыру немесе алып тастау
+                const headerInsideMenu = mainMenuContainer.querySelector('header h2');
+                if (headerInsideMenu && headerInsideMenu.textContent.includes("Тестті таңдаңыз:")) {
+                    headerInsideMenu.classList.add('hidden'); // Тақырыпты жасыру
+                }
+
+                const test = quizData["civil_war"];
+                const button = document.createElement('button');
+                button.classList.add('menu-button');
+                button.textContent = "Тестті Бастау"; // Батырма атауын өзгерту
+                button.dataset.testKey = "civil_war";
+                button.addEventListener('click', (e) => {
+                    selectTest(e.target.dataset.testKey);
+                });
+                menuButtonsContainer.appendChild(button);
+
+            } else {
+                 mainMenuTitle.textContent = "Тестті таңдаңыз:"; // Бастапқы тақырып
+                const headerInsideMenu = mainMenuContainer.querySelector('header h2');
+                 if (headerInsideMenu) {
+                    headerInsideMenu.classList.remove('hidden');
+                }
+                for (const key in quizData) {
+                    const test = quizData[key];
+                    const button = document.createElement('button');
+                    button.classList.add('menu-button');
+                    button.textContent = test.name;
+                    button.dataset.testKey = key;
+                    button.addEventListener('click', (e) => {
+                        selectTest(e.target.dataset.testKey);
+                    });
+                    menuButtonsContainer.appendChild(button);
+                }
+            }
+        }
+
+        function selectTest(testKey) {
+            currentTestKey = testKey;
+            currentQuestions = [...quizData[testKey].questions]; // Көшірмесін алу
+            quizTitleElement.textContent = quizData[testKey].name; // Тест атауын орнату
+            resultsTitleElement.textContent = `${quizData[testKey].name} - Нәтиже`; // Нәтиже атауын орнату
+            startQuiz();
+        }
+
+
+        // --- Quiz Logic ---
+        function startQuiz() {
+            showQuizArea();
+            shuffleArray(currentQuestions);
+            currentQuestionIndex = 0;
+            score = 0;
+            answerSelectedThisTurn = false;
+            scoreElement.textContent = score;
+            totalQuestionsElement.textContent = currentQuestions.length;
+            nextBtn.textContent = "Келесі сұрақ";
+            nextBtn.disabled = true;
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            resetState();
+            if (currentQuestionIndex >= currentQuestions.length) {
+                showResults();
+                return;
+            }
+
+            const currentQuestion = currentQuestions[currentQuestionIndex];
+            questionTextElement.textContent = currentQuestion.question;
+            currentQuestionNumElement.textContent = currentQuestionIndex + 1;
+
+            const shuffledAnswers = [...currentQuestion.answers];
+            shuffleArray(shuffledAnswers);
+
+            shuffledAnswers.forEach(answer => {
+                const button = document.createElement('button');
+                button.textContent = answer.text;
+                button.classList.add('answer-btn');
+                if (answer.correct) {
+                    button.dataset.correct = true;
+                }
+                button.addEventListener('click', selectAnswer);
+                answersContainer.appendChild(button);
+            });
+            updateProgressBar();
+            answerSelectedThisTurn = false;
+            nextBtn.disabled = true;
+        }
+
+        function resetState() {
+            feedbackTextElement.textContent = '';
+            feedbackTextElement.className = ''; // Түс класстарын алып тастау
+            while (answersContainer.firstChild) {
+                answersContainer.removeChild(answersContainer.firstChild);
+            }
+        }
+
+        function selectAnswer(e) {
+            if (answerSelectedThisTurn) return;
+            answerSelectedThisTurn = true;
+            nextBtn.disabled = false;
+
+            const selectedButton = e.target;
+            const correct = selectedButton.dataset.correct === 'true';
+
+            if (correct) {
+                score++;
+                scoreElement.textContent = score;
+                feedbackTextElement.textContent = 'Дұрыс!';
+                feedbackTextElement.className = 'text-emerald-600';
+                selectedButton.classList.add('correct');
+            } else {
+                feedbackTextElement.textContent = 'Қате!';
+                feedbackTextElement.className = 'text-red-600';
+                selectedButton.classList.add('incorrect');
+                Array.from(answersContainer.children).forEach(button => {
+                    if (button.dataset.correct === 'true') {
+                        button.classList.add('correct');
+                    }
+                });
+            }
+
+            Array.from(answersContainer.children).forEach(button => {
+                button.disabled = true;
+            });
+
+            if (currentQuestionIndex === currentQuestions.length - 1) {
+                nextBtn.textContent = "Нәтижелерді көру";
+            }
+        }
+
+        function updateProgressBar() {
+            const progressPercentage = ((currentQuestionIndex + 1) / currentQuestions.length) * 100;
+            progressBarElement.style.width = `${progressPercentage}%`;
+        }
+
+        function showResults() {
+            showResultsScreen();
+            finalScoreElement.textContent = `${score} / ${currentQuestions.length}`;
+
+            const percentage = (score / currentQuestions.length) * 100;
+            let message = "";
+            if (percentage === 100) {
+                message = "Керемет! Сіз барлық сұраққа дұрыс жауап бердіңіз!";
+            } else if (percentage >= 75) {
+                message = "Жақсы нәтиже! Сіз тарихты жақсы білесіз.";
+            } else if (percentage >= 50) {
+                message = "Жаман емес! Аздап қайталау керек.";
+            } else {
+                message = "Көбірек дайындалуыңыз керек. Талпыныңыз!";
+            }
+            resultMessageElement.textContent = message;
+        }
+
+        // --- Event Listeners ---
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            loadQuestion();
+        });
+
+        restartBtn.addEventListener('click', () => {
+            if (currentTestKey) {
+                selectTest(currentTestKey);
+            } else {
+                showMainMenu(); // Егер currentTestKey жоқ болса (мысалы, қателік), негізгі мәзірге оралу
+            }
+        });
+
+        backToMenuFromResultsBtn.addEventListener('click', showMainMenu);
+        backToMenuFromQuizBtn.addEventListener('click', () => {
+            showMainMenu();
+        });
+
+
+        modalCloseBtn.addEventListener('click', closeErrorModal);
+        window.addEventListener('click', (event) => {
+            if (event.target === errorModal) {
+                closeErrorModal();
+            }
+        });
+
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', showMainMenu);
+
+    </script>
+</body>
+</html>
